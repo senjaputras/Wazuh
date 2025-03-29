@@ -1,10 +1,14 @@
 # Wazuh-Archivers
 ## How to collect raw log / all log (logall) using Wazuh. ##
 
-> What is Raw Log? <br>
-Not only match with Rules only will index on Wazuh, but also log that doesnt match with rules.
 
-1. You only need to edit **ossec.conf** in *WAZUH-MANAGER*. <br>
+> What is Alert Log? <br>
+Log that match with rules.
+> 
+> What is Raw Log? <br>
+Log that doesnt match with rules.
+
+1. You only need to edit **/var/ossec/etc/ossec.conf** in *WAZUH-MANAGER*. <br>
     It will make Wazuh-Manager to store all log that shipping by wazuh-agent to file. 
 
     In ossec.conf edit this line.
