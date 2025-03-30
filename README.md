@@ -3,7 +3,7 @@ Sometimes documentation or tutorial in internet skip important small step.
 This is my Wazuh explorer.
 
 First of all. In this documentation I use **Centralized Configuration**. Where agent can be configured remotely by using the agent.conf.
-In this directory there is file "agent.conf". That file include all of configuration wazuh-agent capability: 
+In this directory there is file "agent.conf". That file include all of configuration wazuh-agent capability (on progress): 
 - Vulnerability Detection
 - FIM (File Integrity Monitoring)
 - System Inventory
