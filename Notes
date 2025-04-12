@@ -1,0 +1,3 @@
+Here I compile a few issue when I config wazuh.
+
+1. When we add more than 1 custom decoder, it can 
