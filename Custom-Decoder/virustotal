@@ -1,0 +1,6 @@
+<decoder name="virustotal">
+  <parent>json</parent>
+  <use_own_name>true</use_own_name>
+  <prematch>virustotal</prematch>
+  <plugin_decoder>JSON_Decoder</plugin_decoder>
+</decoder>
