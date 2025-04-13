@@ -1,0 +1,26 @@
+<decoder name="web-accesslog-docker">
+  <parent>json</parent>
+  <type>web-log</type>
+  <use_own_name>true</use_own_name>
+  <prematch offset="after_parent">^log":"\S+ \S+ \S+ \.*[\S+ \S\d+] \.*"\w+ \S+ HTTP\S+" \d+</prematch>
+  <regex offset="after_parent">^log":"(\S+) \S+ \S+ \.*[\S+ \S\d+] \.*"(\w+) (\S+) HTTP\S+" (\d+)</regex>
+  <order>srcip,protocol,url,id</order>
+</decoder>
+
+<decoder name="coredns">
+  <parent>json</parent>
+  <use_own_name>true</use_own_name>
+  <prematch offset="after_parent">[INFO]</prematch>
+  <regex>(\S+):(\d+) - (\d+) \\"(\S+) (\S+) (\S+) (\S+) \d+ \S+ \d+\\" (\S+)</regex>
+  <order>srcip,srcport,txid,dns_type,dns_class,dns_query,dns_proto,dns_status</order>
+</decoder>
+
+<decoder name="yara_decoder">
+  <prematch>wazuh-yara:</prematch>
+</decoder>
+
+<decoder name="yara_decoder1">
+  <parent>yara_decoder</parent>
+  <regex>wazuh-yara: (\S+) - Scan result: (\S+) (\S+)</regex>
+  <order>log_type, yara_rule, yara_scanned_file</order>
+</decoder>
