@@ -1,0 +1,8 @@
+<group name="coredns">
+<rule id="100101" level="10">
+  <decoded_as>coredns</decoded_as>
+  <description>Suspicious DNS Query Detected</description>
+  <group>dns, coredns</group>
+  <field name="dns_query">\.top</field>
+</rule>
+</group>
