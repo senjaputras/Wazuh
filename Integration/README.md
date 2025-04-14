@@ -1,11 +1,14 @@
-This is OpenCTI-Wazuh Integration.
-In this case I triger OpenCTI feed when match with DNS Server.
-When there are request domain to DNS Server, this integrator will try search information about the domain in OpenCTI and send it to Wazuh.
+This is the OpenCTI-Wazuh Integration.
+In this case, I trigger the OpenCTI feed when there's a match on the DNS server.
+When a domain request is sent to the DNS server, this integrator searches for information about the domain in OpenCTI and sends the results to Wazuh.
 
-3 parameter need to change:
-1. OpenCTI URL
-2. OpenCTI API Key
-3. GraphQL Query
+There are three parameters that need to be configured:
 
-In my script GraphQL Query specific for *.top domain. I will change it to variable (in progress)
-I'll explain more details soon!
+OpenCTI URL
+
+OpenCTI API Key
+
+GraphQL Query
+
+In my current script, the GraphQL query is specifically set to search for *.top domains. I’m working on changing that to a variable (still in progress).
+I’ll share more details soon!
