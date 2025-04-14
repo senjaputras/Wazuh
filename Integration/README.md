@@ -8,3 +8,4 @@ When there are request domain to DNS Server, this integrator will try search inf
 3. GraphQL Query
 
 In my script GraphQL Query specific for *.top domain. I will change it to variable (in progress)
+I'll explain more details soon!
