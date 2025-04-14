@@ -27,10 +27,10 @@ def send_event(msg, agent = None):
         string = '1:opencti:{0}'.format(json.dumps(msg))
     else:
         string = '1:[{0}] ({1}) {2}->opencti:{3}'.format(agent["id"], agent["name"], agent["ip"] if "ip" in agent else "any", json.dumps(msg))
-    print(string.encode())
-    
-
-    
+    #sock = socket(AF_UNIX, SOCK_DGRAM)
+    #sock.connect(socket_addr)
+    #print(string.encode())
+    #sock.close()   
 
 false = False
 
@@ -45,10 +45,10 @@ alert_file.close()
 alert_output = {}
 
 # OpenCTI Server Base URL
-opencti_base_url = "http://194.164.148.128:8080/graphql"
+opencti_base_url = "http://x.x.x.x:8080/graphql"
 
 # OpenCTI Server API AUTH KEY
-opencti_api_auth_key = "Bearer 2e93abec-4d22-4e34-8e73-73afa582c6da"
+opencti_api_auth_key = "Bearer xxxxxx"
 
 # API - HTTP Headers
 opencti_apicall_headers = {"Content-Type":"application/json", "Authorization":f"{opencti_api_auth_key}", "Accept":"*/*"}
@@ -60,10 +60,11 @@ opencti_apicall_headers = {"Content-Type":"application/json", "Authorization":f"
 ## Regex Pattern used based on SHA256 lenght (64 characters)
 regex_file_hash = re.compile('\w{64}')
 
-if 'dns_query' not in alert['_source']['data']:
-    sys.exit()
+if 'dns_query' not in alert['data']:
+    print ("not found")
+    #sys.exit()
 else:
-    dns_query = alert['_source']['data']['dns_query']
+    dns_query = alert['data']['dns_query']
     api_json_body = {
         "query": """  query { stixCyberObservables( search: "blackfriday-shoe.top." types: ["Domain-Name"] first: 5 ) { edges { node { id standard_id observable_value entity_type x_opencti_description x_opencti_score created_at updated_at createdBy { id name entity_type } objectMarking { id definition definition_type x_opencti_order } objectLabel { id value } externalReferences { edges { node { id source_name url description } } } indicators { edges { node { id name pattern pattern_type valid_from created description } } } reports { edges { node { id name description published } } } notes { edges { node { id attribute_abstract content created authors } } } opinions { edges { node { id opinion explanation created } } } importFiles { edges { node { id name size } } } } } } } """
     }
@@ -86,6 +87,7 @@ else:
             alert_output["opencti"] = opencti_api_response["data"]["stixCyberObservables"]["edges"][0]["node"]
             for i in range(labels_length):
               alert_output["opencti"][i] = opencti_api_response["data"]["stixCyberObservables"]["edges"][0]["node"]["objectLabel"][i]
-            send_event(alert_output, alert["_source"]["agent"])
+            print(alert_output)
+            send_event(alert_output, alert["agent"])
         else:
             sys.exit()
