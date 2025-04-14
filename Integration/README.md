@@ -1,4 +1,4 @@
-This is Integration OpenCTI-Wazuh.
+This is OpenCTI-Wazuh Integration.
 In this case I triger OpenCTI feed when match with DNS Server.
 When there are request domain to DNS Server, this integrator will try search information about the domain in OpenCTI and send it to Wazuh.
 
