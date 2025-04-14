@@ -1,0 +1,91 @@
+#!/usr/bin/env python
+# Aurora Networks Managed Services
+# https://www.auroranetworks.net
+# info@auroranetworks.net.
+#
+# This program is free software; you can redistribute it
+# and/or modify it under the terms of the GNU General Public
+# License (version 2) as published by the FSF - Free Software
+# Foundation.
+import sys
+import os
+from socket import socket, AF_UNIX, SOCK_DGRAM
+from datetime import date, datetime, timedelta
+import time
+import requests
+from requests.exceptions import ConnectionError
+import json
+import ipaddress
+import hashlib
+import re
+pwd = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+socket_addr = '{0}/queue/sockets/queue'.format(pwd)
+null = "null"
+opencti_key_valyue_type="value"
+def send_event(msg, agent = None):
+    if not agent or agent["id"] == "000":
+        string = '1:opencti:{0}'.format(json.dumps(msg))
+    else:
+        string = '1:[{0}] ({1}) {2}->opencti:{3}'.format(agent["id"], agent["name"], agent["ip"] if "ip" in agent else "any", json.dumps(msg))
+    print(string.encode())
+    
+
+    
+
+false = False
+
+# Read configuration parameters
+alert_file = open(sys.argv[1])
+
+# Read the alert file
+alert = json.loads(alert_file.read())
+alert_file.close()
+
+# New Alert Output if OpenCTI Alert or Error calling the API
+alert_output = {}
+
+# OpenCTI Server Base URL
+opencti_base_url = "http://194.164.148.128:8080/graphql"
+
+# OpenCTI Server API AUTH KEY
+opencti_api_auth_key = "Bearer 2e93abec-4d22-4e34-8e73-73afa582c6da"
+
+# API - HTTP Headers
+opencti_apicall_headers = {"Content-Type":"application/json", "Authorization":f"{opencti_api_auth_key}", "Accept":"*/*"}
+
+## Kita pakai buat next selain domain
+## Extract Sysmon for Windows/Sysmon for Linux and Sysmon Event ID
+## event_source = alert["rule"]["groups"][0]
+## event_type = alert["rule"]["groups"][2]
+## Regex Pattern used based on SHA256 lenght (64 characters)
+regex_file_hash = re.compile('\w{64}')
+
+if 'dns_query' not in alert['_source']['data']:
+    sys.exit()
+else:
+    dns_query = alert['_source']['data']['dns_query']
+    api_json_body = {
+        "query": """  query { stixCyberObservables( search: "blackfriday-shoe.top." types: ["Domain-Name"] first: 5 ) { edges { node { id standard_id observable_value entity_type x_opencti_description x_opencti_score created_at updated_at createdBy { id name entity_type } objectMarking { id definition definition_type x_opencti_order } objectLabel { id value } externalReferences { edges { node { id source_name url description } } } indicators { edges { node { id name pattern pattern_type valid_from created description } } } reports { edges { node { id name description published } } } notes { edges { node { id attribute_abstract content created authors } } } opinions { edges { node { id opinion explanation created } } } importFiles { edges { node { id name size } } } } } } } """
+    }
+    try:
+        opencti_api_response = requests.post(opencti_base_url, headers=opencti_apicall_headers,json=api_json_body)
+    except ConnectionError:
+        alert_output["opencti"] = {}
+        alert_output["integration"] = "opencti"
+        alert_output["opencti"]["error"] = 'Connection Error to OpenCTI API'
+        send_event(alert_output, alert["agent"])
+    else:
+        opencti_api_response = opencti_api_response.json()
+
+        # Check if response includes Attributes (IoCs)
+        if (opencti_api_response["data"]["stixCyberObservables"]["edges"]):
+        # Generate Alert Output from OpenCTI Response
+            labels_length = len(opencti_api_response["data"]["stixCyberObservables"]["edges"][0]["node"]["objectLabel"])
+            alert_output["opencti"] = {}
+            alert_output["integration"] = "opencti"
+            alert_output["opencti"] = opencti_api_response["data"]["stixCyberObservables"]["edges"][0]["node"]
+            for i in range(labels_length):
+              alert_output["opencti"][i] = opencti_api_response["data"]["stixCyberObservables"]["edges"][0]["node"]["objectLabel"][i]
+            send_event(alert_output, alert["_source"]["agent"])
+        else:
+            sys.exit()
