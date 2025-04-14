@@ -1,0 +1,69 @@
+query { stixCyberObservables( 
+  search: "blackfriday-shoe.top." 
+  types: ["Domain-Name"] 
+  first: 5 ) { 
+    edges { 
+      node { 
+        id 
+        standard_id 
+        observable_value 
+        entity_type 
+        x_opencti_description 
+        x_opencti_score 
+        created_at 
+        updated_at 
+        createdBy { 
+          id 
+          name 
+          entity_type } 
+        objectMarking { 
+          id 
+          definition 
+          definition_type 
+          x_opencti_order } 
+        objectLabel { 
+          id 
+          value } 
+        externalReferences { 
+          edges { 
+            node { 
+              id 
+              source_name 
+              url 
+              description } } } 
+        indicators { 
+          edges { 
+            node { 
+              id 
+              name 
+              pattern 
+              pattern_type 
+              valid_from 
+              created description } } } 
+        reports { 
+          edges { 
+            node { 
+              id 
+              name 
+              description 
+              published } } } 
+        notes { 
+          edges { 
+            node { 
+              id 
+              attribute_abstract 
+              content 
+              created authors } } } 
+        opinions { 
+          edges { 
+            node { 
+              id 
+              opinion 
+              explanation 
+              created } } } 
+        importFiles { 
+          edges { 
+            node { 
+              id 
+              name 
+              size } } } } } } }
