@@ -10,4 +10,5 @@ There are three parameters that need to be configured:
 
 In my current script, the GraphQL query is specifically set to search for *.top domains. I’m working on changing that to a variable (still in progress).
 
-I’ll share more details soon!
+For now there is duplication of data from OpenCTI in one json/event, this makes parsing not work properly. I am in the process of working on that 
+I will share more details soon!
