@@ -27,10 +27,10 @@ def send_event(msg, agent = None):
         string = '1:opencti:{0}'.format(json.dumps(msg))
     else:
         string = '1:[{0}] ({1}) {2}->opencti:{3}'.format(agent["id"], agent["name"], agent["ip"] if "ip" in agent else "any", json.dumps(msg))
-    #sock = socket(AF_UNIX, SOCK_DGRAM)
-    #sock.connect(socket_addr)
-    #print(string.encode())
-    #sock.close()   
+    sock = socket(AF_UNIX, SOCK_DGRAM)
+    sock.connect(socket_addr)
+    sock.send(string.encode())
+    sock.close()   
 
 false = False
 
