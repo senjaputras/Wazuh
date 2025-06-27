@@ -1,0 +1,78 @@
+  <agent_config>
+    <!-- Shared agent configuration here -->
+    <localfile>
+      <location>Security</location>
+      <log_format>eventchannel</log_format>
+    </localfile>
+    <localfile>
+      <location>Application</location>
+      <log_format>eventchannel</log_format>
+    </localfile>
+    <localfile>
+      <location>Microsoft-Windows-PowerShell/Operational</location>
+      <log_format>eventchannel</log_format>
+    </localfile>
+    <localfile>
+      <location>System</location>
+      <log_format>eventchannel</log_format>
+    </localfile>
+    <localfile>
+      <location>Microsoft-Windows-Sysmon/Operational</location>
+      <log_format>eventchannel</log_format>
+    </localfile>
+    <vulnerability-detection>
+      <enabled>yes</enabled>
+      <index-status>yes</index-status>
+      <feed-update-interval>60m</feed-update-interval>
+    </vulnerability-detection>
+    <!-- File integrity monitoring -->
+    <syscheck>
+      <disabled>no</disabled>
+      <!-- Frequency that syscheck is executed default every 12 hours -->
+      <frequency>60</frequency>
+      <scan_on_start>yes</scan_on_start>
+      <!-- Directories to check  (perform all possible verifications) -->
+      <directories realtime="yes" check_all="yes">C:\Windows\System32</directories>
+      <directories check_all="yes">C:\Program Files</directories>
+      <directories check_all="yes">C:\Users</directories>
+      <directories realtime="yes" check_all="yes" report_changes="yes">C:\Users\Administrator\Documents</directories>
+      <!-- Files/directories to ignore -->
+      <ignore>C:\Windows\Temp</ignore>
+      <skip_nfs>yes</skip_nfs>
+      <skip_dev>yes</skip_dev>
+      <skip_proc>yes</skip_proc>
+      <skip_sys>yes</skip_sys>
+      <!-- Nice value for Syscheck process -->
+      <process_priority>10</process_priority>
+      <!-- Maximum output throughput -->
+      <max_eps>50</max_eps>
+      <!-- Database synchronization settings -->
+      <synchronization>
+        <enabled>yes</enabled>
+        <interval>5m</interval>
+        <max_eps>10</max_eps>
+      </synchronization>
+    </syscheck>
+    <!-- System inventory -->
+    <wodle name="syscollector">
+      <disabled>no</disabled>
+      <interval>1h</interval>
+      <scan_on_start>yes</scan_on_start>
+      <hardware>yes</hardware>
+      <os>yes</os>
+      <network>yes</network>
+      <packages>yes</packages>
+      <ports all="no">yes</ports>
+      <processes>yes</processes>
+      <!-- Database synchronization settings -->
+      <synchronization>
+        <max_eps>10</max_eps>
+      </synchronization>
+    </wodle>
+    <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
+      <interval>5m</interval>
+      <skip_nfs>yes</skip_nfs>
+    </sca>
+  </agent_config>
