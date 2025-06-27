@@ -1,92 +1,97 @@
-<agent_config>
-
-  <!-- Shared agent configuration here -->
-
-<vulnerability-detection>
-   <enabled>yes</enabled>
-   <index-status>yes</index-status>
-   <feed-update-interval>60m</feed-update-interval>
-</vulnerability-detection>
-
- <!-- File integrity monitoring -->
-  <syscheck>
-    <disabled>no</disabled>
-
-    <!-- Frequency that syscheck is executed default every 12 hours -->
-    <frequency>60</frequency>
-
-    <scan_on_start>yes</scan_on_start>
-
-    <!-- Directories to check  (perform all possible verifications) -->
-    <directories>/etc,/usr/bin,/usr/sbin</directories>
-    <directories>/bin,/sbin,/boot</directories>
-    <directories realtime="yes">/etc/init.d</directories>
-    <directories realtime="yes" check_all="yes" report_changes="yes">/root/html</directories>
-
-
-    <!-- Files/directories to ignore -->
-    <ignore>/etc/mtab</ignore>
-    <ignore>/etc/hosts.deny</ignore>
-    <ignore>/etc/mail/statistics</ignore>
-    <ignore>/etc/random-seed</ignore>
-    <ignore>/etc/random.seed</ignore>
-    <ignore>/etc/adjtime</ignore>
-    <ignore>/etc/httpd/logs</ignore>
-    <ignore>/etc/utmpx</ignore>
-    <ignore>/etc/wtmpx</ignore>
-    <ignore>/etc/cups/certs</ignore>
-    <ignore>/etc/dumpdates</ignore>
-    <ignore>/etc/svc/volatile</ignore>
-
-    <!-- File types to ignore -->
-    <ignore type="sregex">.log$|.swp$</ignore>
-
-    <!-- Check the file, but never compute the diff -->
-    <nodiff>/etc/ssl/private.key</nodiff>
-
-    <skip_nfs>yes</skip_nfs>
-    <skip_dev>yes</skip_dev>
-    <skip_proc>yes</skip_proc>
-    <skip_sys>yes</skip_sys>
-
-    <!-- Nice value for Syscheck process -->
-    <process_priority>10</process_priority>
-
-    <!-- Maximum output throughput -->
-    <max_eps>50</max_eps>
-
-    <!-- Database synchronization settings -->
-    <synchronization>
+  <agent_config>
+    <!-- Shared agent configuration here -->
+    <localfile>
+      <log_format>syslog</log_format>
+      <location>/var/log/auth.log</location>
+    </localfile>
+    <localfile>
+      <log_format>syslog</log_format>
+      <location>/var/log/syslog</location>
+    </localfile>
+    <localfile>
+      <log_format>syslog</log_format>
+      <location>/var/log/messages</location>
+    </localfile>
+    <localfile>
+      <log_format>audit</log_format>
+      <location>/var/log/audit/audit.log</location>
+    </localfile>
+    <localfile>
+      <log_format>audit</log_format>
+      <location>/var/log/apache2/other_vhosts_access.log</location>
+    </localfile>
+    <localfile>
+      <location>/var/log/commands.log</location>
+      <log_format>syslog</log_format>
+    </localfile>
+    <vulnerability-detection>
       <enabled>yes</enabled>
+      <index-status>yes</index-status>
+      <feed-update-interval>60m</feed-update-interval>
+    </vulnerability-detection>
+    <!-- File integrity monitoring -->
+    <syscheck>
+      <disabled>no</disabled>
+      <!-- Frequency that syscheck is executed default every 12 hours -->
+      <frequency>60</frequency>
+      <scan_on_start>yes</scan_on_start>
+      <!-- Directories to check  (perform all possible verifications) -->
+      <directories>/etc,/usr/bin,/usr/sbin</directories>
+      <directories>/bin,/sbin,/boot</directories>
+      <directories realtime="yes">/etc/init.d</directories>
+      <directories realtime="yes" check_all="yes" report_changes="yes">/srv/www/wordpress</directories>
+      <!-- Files/directories to ignore -->
+      <ignore>/etc/mtab</ignore>
+      <ignore>/etc/hosts.deny</ignore>
+      <ignore>/etc/mail/statistics</ignore>
+      <ignore>/etc/random-seed</ignore>
+      <ignore>/etc/random.seed</ignore>
+      <ignore>/etc/adjtime</ignore>
+      <ignore>/etc/httpd/logs</ignore>
+      <ignore>/etc/utmpx</ignore>
+      <ignore>/etc/wtmpx</ignore>
+      <ignore>/etc/cups/certs</ignore>
+      <ignore>/etc/dumpdates</ignore>
+      <ignore>/etc/svc/volatile</ignore>
+      <!-- File types to ignore -->
+      <ignore type="sregex">.log$|.swp$</ignore>
+      <!-- Check the file, but never compute the diff -->
+      <nodiff>/etc/ssl/private.key</nodiff>
+      <skip_nfs>yes</skip_nfs>
+      <skip_dev>yes</skip_dev>
+      <skip_proc>yes</skip_proc>
+      <skip_sys>yes</skip_sys>
+      <!-- Nice value for Syscheck process -->
+      <process_priority>10</process_priority>
+      <!-- Maximum output throughput -->
+      <max_eps>50</max_eps>
+      <!-- Database synchronization settings -->
+      <synchronization>
+        <enabled>yes</enabled>
+        <interval>5m</interval>
+        <max_eps>10</max_eps>
+      </synchronization>
+    </syscheck>
+    <!-- System inventory -->
+    <wodle name="syscollector">
+      <disabled>no</disabled>
+      <interval>1h</interval>
+      <scan_on_start>yes</scan_on_start>
+      <hardware>yes</hardware>
+      <os>yes</os>
+      <network>yes</network>
+      <packages>yes</packages>
+      <ports all="no">yes</ports>
+      <processes>yes</processes>
+      <!-- Database synchronization settings -->
+      <synchronization>
+        <max_eps>10</max_eps>
+      </synchronization>
+    </wodle>
+    <sca>
+      <enabled>yes</enabled>
+      <scan_on_start>yes</scan_on_start>
       <interval>5m</interval>
-      <max_eps>10</max_eps>
-    </synchronization>
-  </syscheck>
-
-
- <!-- System inventory -->
-  <wodle name="syscollector">
-    <disabled>no</disabled>
-    <interval>1h</interval>
-    <scan_on_start>yes</scan_on_start>
-    <hardware>yes</hardware>
-    <os>yes</os>
-    <network>yes</network>
-    <packages>yes</packages>
-    <ports all="no">yes</ports>
-    <processes>yes</processes>
-
-    <!-- Database synchronization settings -->
-    <synchronization>
-      <max_eps>10</max_eps>
-    </synchronization>
-  </wodle>
-
- <sca>
-    <enabled>yes</enabled>
-    <scan_on_start>yes</scan_on_start>
-    <interval>5m</interval>
-    <skip_nfs>yes</skip_nfs>
-  </sca>
-
-</agent_config>
+      <skip_nfs>yes</skip_nfs>
+    </sca>
+  </agent_config>
