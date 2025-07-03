@@ -24,11 +24,6 @@
       <location>/var/log/commands.log</location>
       <log_format>syslog</log_format>
     </localfile>
-    <vulnerability-detection>
-      <enabled>yes</enabled>
-      <index-status>yes</index-status>
-      <feed-update-interval>60m</feed-update-interval>
-    </vulnerability-detection>
     <!-- File integrity monitoring -->
     <syscheck>
       <disabled>no</disabled>
